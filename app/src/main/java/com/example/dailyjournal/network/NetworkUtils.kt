@@ -9,8 +9,14 @@ import java.net.URL
 
 object NetworkUtils {
 
-//    private const val BASE_URL = "https://kotlin-backend-zz4x.onrender.com/api/blogs"
+    // ⚡ BASE URL
+    // You can extend this with /auth, /blogs, etc. for different endpoints.
     private const val BASE_URL = "https://kotlin-backend.ssherikar2005.workers.dev/api/blogs"
+    private const val AUTH_URL = "https://kotlin-backend.ssherikar2005.workers.dev/api/auth"
+
+    // ----------------------------
+    // EXISTING BLOG FUNCTIONS
+    // ----------------------------
 
     fun getAllBlogs(): JSONArray? {
         try {
@@ -78,5 +84,83 @@ object NetworkUtils {
         return false
     }
 
+    // ----------------------------
+    // NEW AUTHENTICATION METHODS
+    // ----------------------------
 
+    fun signup(name: String, email: String, password: String): JSONObject? {
+        try {
+            val url = URL("$AUTH_URL/signup")
+            val connection = url.openConnection() as HttpURLConnection
+            connection.requestMethod = "POST"
+            connection.doOutput = true
+            connection.setRequestProperty("Content-Type", "application/json")
+
+            val data = JSONObject()
+            data.put("name", name)
+            data.put("email", email)
+            data.put("password", password)
+
+            val output = BufferedWriter(OutputStreamWriter(connection.outputStream))
+            output.write(data.toString())
+            output.flush()
+            output.close()
+
+            val input = BufferedReader(InputStreamReader(connection.inputStream))
+            val response = input.readText()
+            input.close()
+
+            return JSONObject(response)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return null
+    }
+
+    fun login(email: String, password: String): JSONObject? {
+        try {
+            val url = URL("$AUTH_URL/login")
+            val connection = url.openConnection() as HttpURLConnection
+            connection.requestMethod = "POST"
+            connection.doOutput = true
+            connection.setRequestProperty("Content-Type", "application/json")
+
+            val data = JSONObject()
+            data.put("email", email)
+            data.put("password", password)
+
+            val output = BufferedWriter(OutputStreamWriter(connection.outputStream))
+            output.write(data.toString())
+            output.flush()
+            output.close()
+
+            val input = BufferedReader(InputStreamReader(connection.inputStream))
+            val response = input.readText()
+            input.close()
+
+            Log.d("LOGIN_RESPONSE", response)
+            return JSONObject(response)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return null
+    }
+
+    fun getProfile(userId: String): JSONObject? {
+        try {
+            val url = URL("$AUTH_URL/profile/$userId")
+            val connection = url.openConnection() as HttpURLConnection
+            connection.requestMethod = "GET"
+            connection.connect()
+
+            val input = BufferedReader(InputStreamReader(connection.inputStream))
+            val response = input.readText()
+            input.close()
+
+            return JSONObject(response)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return null
+    }
 }

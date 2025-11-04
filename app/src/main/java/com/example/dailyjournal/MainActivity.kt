@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -28,6 +29,17 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val prefs = getSharedPreferences("user", MODE_PRIVATE)
+        val userId = prefs.getString("userId", null)
+        if (userId.isNullOrEmpty()) {
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+            return
+        }
+        findViewById<ImageView>(R.id.btnProfile).setOnClickListener {
+            startActivity(Intent(this, ProfileActivity::class.java))
+        }
+
 //        setSupportActionBar(findViewById(R.id.toolbar))
 //        findViewById<MaterialToolbar>(R.id.toolbar).setOnMenuItemClickListener { item ->
 //            when (item.itemId) {

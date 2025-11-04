@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/bg_gradient_retro"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:id="@+id/tvLoginTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Login"
+            android:textSize="26sp"
+            android:fontFamily="@font/press_start_2p"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp" />
+
+        <EditText
+            android:id="@+id/etEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:background="@drawable/bg_input_field"
+            android:padding="14dp"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#B0B0B0" />
+
+        <EditText
+            android:id="@+id/etPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:background="@drawable/bg_input_field"
+            android:padding="14dp"
+            android:layout_marginTop="12dp"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#B0B0B0" />
+
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Login"
+            android:textAllCaps="false"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="#FF5E5B"
+            android:textColor="#FFFFFF"
+            android:fontFamily="@font/press_start_2p"/>
+
+        <TextView
+            android:id="@+id/tvSignup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Don't have an account? Sign up"
+            android:textColor="#E0E0E0"
+            android:layout_marginTop="14dp" />
+    </LinearLayout>
+</ScrollView>
