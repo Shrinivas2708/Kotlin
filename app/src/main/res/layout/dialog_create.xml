@@ -1,35 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:background="@color/cardBackground"
-    android:padding="18dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="24dp"
+    android:background="@drawable/bg_dialog_card"
+    android:gravity="center_horizontal">
 
     <TextView
+        android:id="@+id/tvDialogTitle"
         android:text="New Journal Entry"
-        android:textColor="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
         android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="8dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:fontFamily="@font/press_start_2p"
+        android:layout_marginBottom="16dp"
+        android:gravity="center" />
 
     <EditText
         android:id="@+id/etTitle"
-        android:hint="Enter title"
-        android:backgroundTint="@color/colorPrimary"
-        android:inputType="textCapSentences"
+        android:hint="Title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:padding="14dp"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#BBBBBB"
+        android:background="@drawable/bg_input_field"
+        android:inputType="textCapSentences" />
 
     <EditText
         android:id="@+id/etBody"
         android:hint="Write your thoughts..."
-        android:backgroundTint="@color/colorPrimaryDark"
-        android:gravity="top"
-        android:minLines="4"
-        android:layout_marginTop="12dp"
-        android:inputType="textMultiLine"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:minLines="4"
+        android:gravity="top"
+        android:padding="14dp"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#BBBBBB"
+        android:background="@drawable/bg_input_field"
+        android:inputType="textMultiLine" />
 </LinearLayout>

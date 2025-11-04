@@ -5,63 +5,106 @@
     android:id="@+id/rootMain"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/backgroundLight">
+    android:background="@drawable/bg_gradient_retro">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <!-- RETRO HEADER -->
+    <LinearLayout
+        android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="4dp">
+        android:paddingTop="48dp"
+        android:paddingBottom="16dp"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            style="@style/Widget.MaterialComponents.Toolbar.Primary"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary"
-            android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
-            app:title="Daily Journal"
-            app:titleCentered="true"
-            app:navigationIcon="@android:drawable/ic_menu_sort_by_size"
-            app:menu="@menu/main_menu" />
+        <TextView
+            android:id="@+id/tvAppTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Daily Journal"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/press_start_2p"
+            android:textColor="#FFFFFF"
+            android:letterSpacing="0.05"
+            android:shadowColor="#66000000"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="4" />
 
-    </com.google.android.material.appbar.AppBarLayout>
+        <TextView
+            android:id="@+id/tvSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Capture your day with style"
+            android:textSize="20sp"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="#F3F3F3"
+            android:layout_marginTop="8dp"/>
+    </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvBlogs"
+
+
+    <!-- MAIN CONTENT -->
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="8dp"
-        android:clipToPadding="false"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
 
+        >
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvBlogs"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="140dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="100dp"
+            android:clipToPadding="false"
+            />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+    <!-- FAB -->
+
+
+    <!-- RETRO LOADING OVERLAY -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabCreate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="24dp"
         android:contentDescription="Add"
+        app:backgroundTint="#FF5E5B"
         app:srcCompat="@android:drawable/ic_input_add"
-        app:tint="@android:color/white"
-        app:backgroundTint="@color/colorAccent"
-        app:layout_anchorGravity="bottom|end"
-        app:layout_anchor="@id/rvBlogs"/>
-
-    <!-- LOADING OVERLAY -->
+        app:tint="@android:color/white" />
+    <!--    <stroke android:width="2dp" android:color="#FF4081" />-->
+    <!-- RETRO LOADING OVERLAY -->
     <FrameLayout
         android:id="@+id/loadingOverlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#80000000"
+        android:background="#B3000000"
+
         android:visibility="gone"
         android:gravity="center">
 
-        <com.google.android.material.progressindicator.CircularProgressIndicator
-            android:id="@+id/progressIndicator"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            app:indicatorSize="64dp"
-            app:indicatorColor="@color/colorPrimary"
-            app:trackThickness="6dp"
-            android:indeterminate="true"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/progressIndicator"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:indeterminate="true"
+                app:indicatorColor="#FFCC70"
+                app:trackThickness="6dp" />
+        </LinearLayout>
     </FrameLayout>
+
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

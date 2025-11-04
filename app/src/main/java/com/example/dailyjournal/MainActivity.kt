@@ -1,11 +1,16 @@
 package com.example.dailyjournal
 
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.AsyncTask
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.Button
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -23,16 +28,16 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setSupportActionBar(findViewById(R.id.toolbar))
-        findViewById<MaterialToolbar>(R.id.toolbar).setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.action_refresh -> {
-                    LoadBlogsTask().execute()
-                    true
-                }
-                else -> false
-            }
-        }
+//        setSupportActionBar(findViewById(R.id.toolbar))
+//        findViewById<MaterialToolbar>(R.id.toolbar).setOnMenuItemClickListener { item ->
+//            when (item.itemId) {
+//                R.id.action_refresh -> {
+//                    LoadBlogsTask().execute()
+//                    true
+//                }
+//                else -> false
+//            }
+//        }
 
 
         adapter = BlogAdapter(mutableListOf(), onClick = { openDetail(it) }, onDelete = { confirmDelete(it) })
@@ -52,19 +57,50 @@ class MainActivity : AppCompatActivity() {
         val etTitle = v.findViewById<EditText>(R.id.etTitle)
         val etBody = v.findViewById<EditText>(R.id.etBody)
 
-        AlertDialog.Builder(this)
-            .setTitle("New Journal Entry")
+        val dialog = AlertDialog.Builder(this, R.style.RetroDialog)
             .setView(v)
-            .setPositiveButton("Save") { _, _ ->
-                val title = etTitle.text.toString().trim()
-                val body = etBody.text.toString().trim()
-                if (title.isNotEmpty() && body.isNotEmpty()) {
-                    CreateBlogTask(title, body).execute()
-                } else Toast.makeText(this, "Please fill both fields", Toast.LENGTH_SHORT).show()
+            .setCancelable(false)
+            .create()
+
+        dialog.show()
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val btnSave = Button(this).apply {
+            text = "Save"
+            setTextColor(Color.WHITE)
+            setBackgroundColor(Color.parseColor("#FF4081"))
+        }
+
+        val btnCancel = Button(this).apply {
+            text = "Cancel"
+            setTextColor(Color.parseColor("#FF4081"))
+            setBackgroundColor(Color.TRANSPARENT)
+        }
+
+        val container = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.END
+            setPadding(0, 20, 0, 0)
+            addView(btnCancel)
+            addView(btnSave)
+        }
+
+        (v as LinearLayout).addView(container)
+
+        btnCancel.setOnClickListener { dialog.dismiss() }
+        btnSave.setOnClickListener {
+            val title = etTitle.text.toString().trim()
+            val body = etBody.text.toString().trim()
+            if (title.isEmpty() || body.isEmpty()) {
+                Toast.makeText(this, "Please fill both fields", Toast.LENGTH_SHORT).show()
+            } else {
+                CreateBlogTask(title, body).execute()
+                dialog.dismiss()
             }
-            .setNegativeButton("Cancel", null)
-            .show()
+        }
     }
+
 
     inner class LoadBlogsTask : AsyncTask<Void, Void, List<Blog>>() {
         override fun onPreExecute() {
@@ -113,23 +149,34 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun confirmDelete(blog: Blog) {
-        AlertDialog.Builder(this)
-            .setTitle("Delete Journal")
-            .setMessage("Are you sure you want to delete this entry?")
-            .setPositiveButton("Delete") { _, _ ->
-                AsyncTask.execute {
-                    val success = NetworkUtils.deleteBlog(blog.id ?: "")
-                    runOnUiThread {
-                        if (success) {
-                            adapter.removeById(blog.id!!)
-                            Snackbar.make(findViewById(R.id.rootMain), "Deleted", Snackbar.LENGTH_SHORT).show()
-                        } else Toast.makeText(this, "Delete failed", Toast.LENGTH_SHORT).show()
-                    }
+        val v = LayoutInflater.from(this).inflate(R.layout.dialog_confirm_delete, null)
+        val btnCancel = v.findViewById<Button>(R.id.btnCancel)
+        val btnDelete = v.findViewById<Button>(R.id.btnDelete)
+
+        val dialog = AlertDialog.Builder(this, R.style.RetroDialog)
+            .setView(v)
+            .setCancelable(false)
+            .create()
+
+        dialog.show()
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        btnCancel.setOnClickListener { dialog.dismiss() }
+
+        btnDelete.setOnClickListener {
+            dialog.dismiss()
+            AsyncTask.execute {
+                val success = NetworkUtils.deleteBlog(blog.id ?: "")
+                runOnUiThread {
+                    if (success) {
+                        adapter.removeById(blog.id!!)
+                        Snackbar.make(findViewById(R.id.rootMain), "Deleted", Snackbar.LENGTH_SHORT).show()
+                    } else Toast.makeText(this, "Delete failed", Toast.LENGTH_SHORT).show()
                 }
             }
-            .setNegativeButton("Cancel", null)
-            .show()
+        }
     }
+
 
 
 
