@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Your app theme -->
-    <style name="Theme.Dailyjournal" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <!-- Your app theme - CHANGED TO DayLight -->
+    <style name="Theme.Dailyjournal" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryVariant">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:statusBarColor">@color/colorPrimaryDark</item>
         <item name="android:navigationBarColor">@color/colorPrimary</item>
-        <item name="alertDialogTheme">@style/RetroDialog</item> <!-- optional -->
+        <item name="alertDialogTheme">@style/RetroDialog</item>
     </style>
 
     <!-- Custom Dialog -->

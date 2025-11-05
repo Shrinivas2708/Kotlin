@@ -1,5 +1,6 @@
 package com.example.dailyjournal
 
+import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
 import android.widget.Button
@@ -32,8 +33,14 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.btnLogout).setOnClickListener {
-            prefs.edit().clear().apply()
+            val prefs = getSharedPreferences("user", MODE_PRIVATE).edit()
+            prefs.clear()
+            prefs.apply()
+
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
             finish()
+
         }
     }
 

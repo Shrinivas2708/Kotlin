@@ -1,55 +1,65 @@
 package com.example.dailyjournal
 
-import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
+import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.dailyjournal.network.NetworkUtils
 import org.json.JSONObject
-import kotlin.jvm.java
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        super.onCreate(savedInstanceState)  // ← MUST BE FIRST!
+        Log.d("LoginActivity", "onCreate START")
 
-        val etEmail = findViewById<EditText>(R.id.etEmail)
-        val etPassword = findViewById<EditText>(R.id.etPassword)
-        val btnLogin = findViewById<Button>(R.id.btnLogin)
-        val tvSignup = findViewById<TextView>(R.id.tvSignup)
+        try {
+            val prefs = getSharedPreferences("user", MODE_PRIVATE)
+            val userId = prefs.getString("userId", null)
+            Log.d("LoginActivity", "Checked userId: $userId")
 
-        // paste from clipboard helper
-        findViewById<TextView>(R.id.tvLoginTitle)?.setOnLongClickListener {
-            val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            val clip = cm.primaryClip
-            if (clip != null && clip.itemCount > 0) {
-                val text = clip.getItemAt(0).coerceToText(this).toString()
-                // basic parse: email:pass or email,password or JSON
-                if (text.contains(":")) {
-                    val parts = text.split(":")
-                    if (parts.size >= 2) {
-                        etEmail.setText(parts[0].trim())
-                        etPassword.setText(parts[1].trim())
-                        Toast.makeText(this, "Pasted credentials", Toast.LENGTH_SHORT).show()
-                    }
+            if (userId != null) {
+                Log.d("LoginActivity", "User logged in, redirecting to MainActivity")
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                finish()
+                return
+            }
+
+            Log.d("LoginActivity", "About to setContentView")
+            setContentView(R.layout.activity_login)
+            Log.d("LoginActivity", "setContentView completed")
+
+            val etEmail = findViewById<EditText>(R.id.etEmail)
+            val etPassword = findViewById<EditText>(R.id.etPassword)
+            val btnLogin = findViewById<Button>(R.id.btnLogin)
+            val tvSignup = findViewById<TextView>(R.id.tvSignup)
+
+            Log.d("LoginActivity", "All views found successfully")
+
+            tvSignup.setOnClickListener {
+                startActivity(Intent(this, SignupActivity::class.java))
+            }
+
+            btnLogin.setOnClickListener {
+                val email = etEmail.text.toString().trim()
+                val password = etPassword.text.toString().trim()
+                Log.d("LoginActivity", "Login clicked: email=$email")
+
+                if (email.isBlank() || password.isBlank()) {
+                    Toast.makeText(this, "Fill both fields", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
                 }
+                LoginTask(email, password).execute()
             }
-            true
-        }
 
-        tvSignup.setOnClickListener { startActivity(Intent(this, SignupActivity::class.java)) }
+            Log.d("LoginActivity", "onCreate COMPLETE")
 
-        btnLogin.setOnClickListener {
-            val email = etEmail.text.toString().trim()
-            val password = etPassword.text.toString().trim()
-            if (email.isBlank() || password.isBlank()) {
-                Toast.makeText(this, "Fill both fields", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-            LoginTask(email, password).execute()
+        } catch (e: Exception) {
+            Log.e("LoginActivity", "ERROR in onCreate", e)
+            e.printStackTrace()
         }
     }
 
